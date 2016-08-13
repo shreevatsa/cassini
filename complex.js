@@ -1,20 +1,20 @@
 /*
  * Copyright (c) 2014, B. W. Lewis. All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the copyright holder nor the names of its
  * contributors may be used to endorse or promote products derived from this
  * software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,14 +26,15 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  */
 
 /* complex.js
  * A super-simple complex number type and a few related functions.
  */
 
-var eps = function()   // Machine epsilon utility function
+// Utility function. Returns machine epsilon: x small enough s.t. 1 + x == 1.
+var eps = function()
 {
   var x = 1;
   var y = x;
@@ -51,7 +52,7 @@ var eps = function()   // Machine epsilon utility function
  *
  * If x is a complex then the new complex value is a copy of x and
  * the argument y is ignored.
- * If x is a number then the it's set to the real part of the new value.
+ * If x is a number then it's set to the real part of the new value.
  * If y is undefined and x is real, then the new imaginary part will be
  * set to zero.
  */
@@ -121,8 +122,10 @@ Complex.prototype.pow = function(q)  // Exponentiation
   return new Complex(r*Math.cos(t*q), r*Math.sin(t*q));
 };
 
+// Returns z/|z| i.e. projection to unit circle.
 Complex.prototype.sign = function()
 {
+  // TODO(shreevatsa): Understand whether this is necessary/sufficient.
   if(this.mod() < 2*eps())
   {
     return 1;
@@ -146,7 +149,7 @@ var ip = function(x,y)
   return mm(t(y,n,1),x,1,n,1)[0];
 };
 
-/* vector axpy */
+/* vector ax + y */
 var axpy = function(a, x, y)
 {
   if(y == undefined)
@@ -231,6 +234,13 @@ trace = function(A)
  */
 var eigs2 = function(A)
 {
+  // Imagine matrix [p q]
+  //                [r s]
+  // Eigenvalues are roots of (x - p)(x - s) - qr = 0.
+  // So: ((p + s) +- sqrt((p+s)^2 - 4(ps-qr))) / 2.
+  // B = p + s
+  // C = ps - qr
+  // d = sqrt(B^2 - 4(ps - qr))
   var B = A[0].add(A[3]);
   var C = A[0].mul(A[3]).sub(A[2].mul(A[1]));
   var d = (B.mul(B).sub(C.mul(4))).pow(0.5);
@@ -246,6 +256,7 @@ var eigs2 = function(A)
  */
 var eigs3 = function(A)
 {
+  // TODO(shreevatsa): Read this function.
   if(Math.sqrt(A.length) !=3) throw(new Error("eigs3 requires a 3x3 matrix"));
   var d = A[6].mul(A[4]).mul(A[2]).
           add(A[3].mul(A[1]).mul(A[8])).
@@ -275,10 +286,11 @@ var eigs3 = function(A)
 };
 
 /* Return a zero array */
+// TODO(shreevatsa): This can probably be just Array(n).fill(0).
 var zeros = function(n)
 {
   return Array.prototype.map.call(Array.apply(null,new Array(n)),
-           function(){return new Complex(0,0);});
+                                  function(){return new Complex(0,0);});
 };
 
 /* Return an nxn identity matrix */
@@ -314,12 +326,15 @@ var show = function(A,m,n)
  * matrix A.  A must be column-major ordered. See lawn 148. Return a rotation
  * matrix of the same size as A.
  */
+// TODO(shreevatsa): What's this? https://en.wikipedia.org/wiki/Givens_rotation
+// Looks like it returns a rotational matrix.
+// Also why "var givens = function(A, i, j)..." over "function givens(A, i, j)"?
 var givens = function(A,i,j)
 {
   var n = Math.sqrt(A.length);
   var a = A[j*n + j];
   var b = A[j*n + i]; // The element to be rotated to zero
-// TODO Handle exceptional cases.
+  // TODO Handle exceptional cases.
   var r = Math.sqrt(a.mod()*a.mod() + b.mod()*b.mod());
   var c = new Complex(a.mod()/r, 0);
   var s = b.conj().div(r).mul(a.sign());
@@ -482,6 +497,7 @@ var quartic = function(a3,a2,a1,a0)
   var tol2 = 0.00001;
   var rz = resolvent(a3,a2,a1,a0);
   var y1 = rz.filter(function(z) {return(Math.abs(z.im)<tol);})[0];
+  if(y1==undefined) return undefined;
   var D, E;
   var R = y1.add(0.25*a3*a3).sub(a2).pow(0.5);
   if(R.mod() < tol2)  // Tolerance here is a problem XXX

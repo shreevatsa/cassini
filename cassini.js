@@ -1,20 +1,20 @@
 /*
  * Copyright (c) 2014, B. W. Lewis All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the copyright holder nor the names of its
  * contributors may be used to endorse or promote products derived from this
  * software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,7 +26,7 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  */
 
 // XXX Consider replacing maps with for loops.
@@ -129,7 +129,7 @@ var cls = function()
 
 var gersh = function(main, xax, yax, data, DELAY)
 {
-// Draw the Gerschgorin discs
+  // Draw the Gerschgorin discs
   var ggn = main.append("svg:g")
                 .selectAll("gershgorin")
                 .data(data)
@@ -160,7 +160,7 @@ var gersh = function(main, xax, yax, data, DELAY)
                          d3.selectAll(".gershlabel").style("opacity","0.4");
                          gershgorin_showing = false;
                        } else {
-			 d3.selectAll(".gershlabel").remove();
+                         d3.selectAll(".gershlabel").remove();
                          draw(1000,2,0);
                        }
                      })
@@ -228,7 +228,7 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                .y(function(d) { return yax(d.im); })
                .interpolate("linear");
 
-  var interp = function(A)
+  var interp = function(A, color, delay, end)
     {
       var o;
       for(j=0;j<A.length;++j)
@@ -236,15 +236,23 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
         o = main.append("svg:g").append("svg:path")
                 .attr("d", line(A[j])).attr("class","cassini")
                 .style("stroke-width","1")
-                .style("stroke","#a00")
-                .style("fill","#a00")
+                .style("stroke",color)
+                .style("fill",color)
                 .style("opacity","0");
-        o.transition().style("opacity","0.2").duration(200).delay(DELAY);
+        // Show, hide after a second, then finally show.
+        o.transition().style("opacity","0.5").duration(200).delay(delay);
+        o.transition().style("opacity","0").duration(200).delay(delay + 1000);
+        o.transition().style("opacity","0.5").duration(200).delay(end);
       }
     };
-  interp(brauer(A,0,1,N));
-  interp(brauer(A,0,2,N));
-  interp(brauer(A,1,2,N));
+  function color(j) {
+    // return ["rgba(0,0,255,0.5)", "rgba(50,255,0,0.5)", "rgba(255,255,0,0.5)"][j];
+    function randomHexChar() { return (Math.floor(Math.random()*16)).toString(16); }
+    return "#" + randomHexChar() + randomHexChar() + randomHexChar();
+  }
+  interp(brauer(A,0,1,N), color(0), DELAY + 0000, DELAY + 3000);
+  interp(brauer(A,0,2,N), color(1), DELAY + 1000, DELAY + 3000);
+  interp(brauer(A,1,2,N), color(2), DELAY + 2000, DELAY + 3000);
 
   var label3 = main.append("svg:g")
                    .append("svg:text")
@@ -264,7 +272,7 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                          d3.selectAll(".casslabel").style("opacity","0.4");
                          cassini_showing = false;
                        } else {
-			 d3.selectAll(".casslabel").remove();
+                         d3.selectAll(".casslabel").remove();
                          draw(1000,3,0);
                        }
                      })
@@ -369,7 +377,7 @@ var brauer = function(A,i,j,N)
   var p = r[i]*r[j];
 
   var solve = function(t)
-       { 
+       {
          var b = real_root(t,s2,p);
          return b.map(function(w)
                {
@@ -427,7 +435,7 @@ real_root = function(t,a,K)
   if(l==undefined) l = [0];
   var ans = l.filter(function(z)
             {
-              return (Math.abs(z.im)<tol); 
+              return (Math.abs(z.im)<tol);
             }).map(function(w){return w.re;});
   return ans;
 };
@@ -449,4 +457,3 @@ ex2 = function()
   x[3].value="-2 + 2i"; x[4].value="-3 - 4i"; x[5].value="-4 + 2i";
   x[6].value="-1 + 1i"; x[7].value="-5 - 2i"; x[8].value="2 + 11i";
 }
-
