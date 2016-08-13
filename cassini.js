@@ -1,20 +1,20 @@
 /*
  * Copyright (c) 2014, B. W. Lewis All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the copyright holder nor the names of its
  * contributors may be used to endorse or promote products derived from this
  * software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,7 +26,7 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  */
 
 // XXX Consider replacing maps with for loops.
@@ -129,7 +129,7 @@ var cls = function()
 
 var gersh = function(main, xax, yax, data, DELAY)
 {
-// Draw the Gerschgorin discs
+  // Draw the Gerschgorin discs
   var ggn = main.append("svg:g")
                 .selectAll("gershgorin")
                 .data(data)
@@ -160,7 +160,7 @@ var gersh = function(main, xax, yax, data, DELAY)
                          d3.selectAll(".gershlabel").style("opacity","0.4");
                          gershgorin_showing = false;
                        } else {
-			 d3.selectAll(".gershlabel").remove();
+                         d3.selectAll(".gershlabel").remove();
                          draw(1000,2,0);
                        }
                      })
@@ -264,7 +264,7 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                          d3.selectAll(".casslabel").style("opacity","0.4");
                          cassini_showing = false;
                        } else {
-			 d3.selectAll(".casslabel").remove();
+                         d3.selectAll(".casslabel").remove();
                          draw(1000,3,0);
                        }
                      })
@@ -369,7 +369,7 @@ var brauer = function(A,i,j,N)
   var p = r[i]*r[j];
 
   var solve = function(t)
-       { 
+       {
          var b = real_root(t,s2,p);
          return b.map(function(w)
                {
@@ -427,7 +427,7 @@ real_root = function(t,a,K)
   if(l==undefined) l = [0];
   var ans = l.filter(function(z)
             {
-              return (Math.abs(z.im)<tol); 
+              return (Math.abs(z.im)<tol);
             }).map(function(w){return w.re;});
   return ans;
 };
@@ -449,4 +449,3 @@ ex2 = function()
   x[3].value="-2 + 2i"; x[4].value="-3 - 4i"; x[5].value="-4 + 2i";
   x[6].value="-1 + 1i"; x[7].value="-5 - 2i"; x[8].value="2 + 11i";
 }
-
