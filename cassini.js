@@ -228,7 +228,7 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                .y(function(d) { return yax(d.im); })
                .interpolate("linear");
 
-  var interp = function(A)
+  var interp = function(A, color, delay, end)
     {
       var o;
       for(j=0;j<A.length;++j)
@@ -236,15 +236,23 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
         o = main.append("svg:g").append("svg:path")
                 .attr("d", line(A[j])).attr("class","cassini")
                 .style("stroke-width","1")
-                .style("stroke","#a00")
-                .style("fill","#a00")
+                .style("stroke",color)
+                .style("fill",color)
                 .style("opacity","0");
-        o.transition().style("opacity","0.2").duration(200).delay(DELAY);
+        // Show, hide after a second, then finally show.
+        o.transition().style("opacity","0.5").duration(200).delay(delay);
+        o.transition().style("opacity","0").duration(200).delay(delay + 1000);
+        o.transition().style("opacity","0.5").duration(200).delay(end);
       }
     };
-  interp(brauer(A,0,1,N));
-  interp(brauer(A,0,2,N));
-  interp(brauer(A,1,2,N));
+  function color(j) {
+    // return ["rgba(0,0,255,0.5)", "rgba(50,255,0,0.5)", "rgba(255,255,0,0.5)"][j];
+    function randomHexChar() { return (Math.floor(Math.random()*16)).toString(16); }
+    return "#" + randomHexChar() + randomHexChar() + randomHexChar();
+  }
+  interp(brauer(A,0,1,N), color(0), DELAY + 0000, DELAY + 3000);
+  interp(brauer(A,0,2,N), color(1), DELAY + 1000, DELAY + 3000);
+  interp(brauer(A,1,2,N), color(2), DELAY + 2000, DELAY + 3000);
 
   var label3 = main.append("svg:g")
                    .append("svg:text")
