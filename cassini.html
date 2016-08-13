@@ -156,21 +156,21 @@ plot elements.
 <table cellspacing="0" cellpadding="0">
 <tr>
 <td>
-<input class="matrix" type="text" value="4 - 4i"/>
-<input class="matrix" type="text" value="-2 -2i"/>
-<input class="matrix" type="text" value="1 + 2i"/>
+<input class="matrix" type="text" value="3"/>
+<input class="matrix" type="text" value="i"/>
+<input class="matrix" type="text" value="1"/>
 <td><div class="divblue">&nbsp;</div>
 <tr>
 <td>
-<input class="matrix" type="text" value="3"/>
-<input class="matrix" type="text" value="0"/>
-<input class="matrix" type="text" value="1 + 3i"/>
+<input class="matrix" type="text" value="-1"/>
+<input class="matrix" type="text" value="4+5i"/>
+<input class="matrix" type="text" value="2"/>
 <td><div class="divgreen">&nbsp;</div>
 <tr>
 <td>
-<input class="matrix" type="text" value="3 - 1i"/>
+<input class="matrix" type="text" value="2"/>
 <input class="matrix" type="text" value="1"/>
-<input class="matrix" type="text" value="-5 - 10i"/>
+<input class="matrix" type="text" value="-1"/>
 <td><div class="divyellow">&nbsp;</div>
 </table>
 </div>
@@ -307,7 +307,7 @@ complex-valued matrices.
 
 <p>
 In the end, I broke my usual rule of not re-inventing the wheel and
-implemented a really simple and tiny 
+implemented a really simple and tiny
 complex-value type and supporting
 library for Javascript myself available here:
 <a href="https://github.com/bwlewis/cassini/blob/master/complex.js">https://github.com/bwlewis/cassini/blob/master/complex.js</a>.
@@ -432,7 +432,7 @@ learn how not to do, and play with the code on Github here:
 <a style="color: #eee;" href="https://github.com/bwlewis/cassini">https://github.com/bwlewis/cassini</a>. You can view a live version of this document there at:
 <a style="color: #eee;" href="http://bwlewis.github.io/cassini/">http://bwlewis.github.io/cassini/</a>.
 The <a style="color: #eee;" href="http://d3js.org">d3.js</a> library is written by Michael Bostock
-licensed under the three-clause BSD license. 
+licensed under the three-clause BSD license.
 The <a  style="color: #eee;"href="http://www.mathjax.org/">MathJax</a> library is written by
 The MathJax Consortium and licensed under the Apache License, version 2.
 The Gerschgorin and Brauer's ovals of Cassini program and associated
@@ -484,7 +484,7 @@ main.append('g')
       d3.scale.linear().domain([-5,5]).range([ 0, width ])
      ).orient('bottom'));
 
-var yScale = 
+var yScale =
     d3.svg.axis().scale(
       d3.scale.linear().domain([-5,5]).range([ height, 0 ]));
 main.append('g')
